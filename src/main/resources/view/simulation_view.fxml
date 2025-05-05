@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<TabPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+         fx:controller="controller.SimulationController">
+
+    <tabs>
+        <Tab text="Customer Status">
+            <BorderPane>
+                <top>
+                    <ListView fx:id="listView" prefHeight="150" VBox.vgrow="NEVER"/>
+                </top>
+                <center>
+                    <TableView fx:id="customerTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn text="Customer ID" fx:id="colCustomerId" prefWidth="100"/>
+                            <TableColumn text="Arrival Time" fx:id="colArrived" prefWidth="120"/>
+                            <TableColumn text="Wait Time" fx:id="colWaitTime" prefWidth="120"/>
+                            <TableColumn text="Service Time" fx:id="colServiceTime" prefWidth="120"/>
+                            <TableColumn text="Doctor Assigned" fx:id="colDoctor" prefWidth="140"/>
+                            <TableColumn text="Status" fx:id="colStatus" prefWidth="140"/>
+                        </columns>
+                    </TableView>
+                </center>
+                <bottom>
+                    <HBox spacing="10" alignment="CENTER" HBox.hgrow="ALWAYS">
+                        <padding>
+                            <Insets top="10" right="10" bottom="10" left="10"/>
+                        </padding>
+                        <Button text="Start Simulation" onAction="#startSimulation"/>
+                    </HBox>
+                </bottom>
+            </BorderPane>
+        </Tab>
+
+        <Tab text="Doctor Utilization">
+            <BorderPane>
+                <center>
+                    <BarChart fx:id="doctorChart" title="Avg Service Time Per Doctor" VBox.vgrow="ALWAYS">
+                        <xAxis>
+                            <CategoryAxis label="Doctor"/>
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis label="Avg. Time (min)"/>
+                        </yAxis>
+                    </BarChart>
+                </center>
+            </BorderPane>
+        </Tab>
+
+        <Tab text="Health Center Performance">
+            <BorderPane>
+                <top>
+                    <LineChart fx:id="centerChart" title="Health Center Performance" VBox.vgrow="ALWAYS">
+                        <xAxis>
+                            <CategoryAxis label="Metrics"/>
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis label="Time (min)"/>
+                        </yAxis>
+                    </LineChart>
+                </top>
+                <center>
+                    <VBox spacing="10" alignment="CENTER">
+                        <padding>
+                            <Insets top="10" right="10" bottom="10" left="10"/>
+                        </padding>
+                        <Label fx:id="servedLabel" text="Served Customers: 0" styleClass="info-label"/>
+                        <Label fx:id="unservedLabel" text="Unserved Customers: 0" styleClass="info-label"/>
+                        <Label fx:id="bestDoctorLabel" text="Best Doctor: —" styleClass="info-label"/>
+                        <Label fx:id="worstDoctorLabel" text="Worst Doctor: —" styleClass="info-label"/>
+                    </VBox>
+                </center>
+            </BorderPane>
+        </Tab>
+    </tabs> <!-- ✅ This was missing -->
+</TabPane>
