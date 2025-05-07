@@ -1,4 +1,4 @@
-Drop the database if it exists
+-- Drop the database if it exists
 DROP DATABASE IF EXISTS healthcentre;
 
 -- Create the database
