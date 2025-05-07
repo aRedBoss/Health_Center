@@ -1,0 +1,29 @@
+Drop the database if it exists
+DROP DATABASE IF EXISTS healthcentre;
+
+-- Create the database
+CREATE DATABASE healthcentre;
+
+-- Switch to the healthcentre database
+USE healthcentre;
+
+-- Drop the tables if they exist
+DROP TABLE IF EXISTS customers;
+DROP TABLE IF EXISTS doctors;
+
+-- Create doctors table
+CREATE TABLE doctors (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100),
+    specialty VARCHAR(100)
+);
+
+-- Create customers table with a foreign key reference to doctors
+CREATE TABLE customers (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    arrival TIME,
+    service_start TIME,
+    service_end TIME,
+    doctor_id INT,
+    FOREIGN KEY (doctor_id) REFERENCES doctors(id)
+);
