@@ -16,12 +16,12 @@
                 <center>
                     <TableView fx:id="customerTable" VBox.vgrow="ALWAYS">
                         <columns>
-                            <TableColumn text="Customer ID" fx:id="colCustomerId" prefWidth="100"/>
-                            <TableColumn text="Arrival Time" fx:id="colArrived" prefWidth="120"/>
-                            <TableColumn text="Wait Time" fx:id="colWaitTime" prefWidth="120"/>
-                            <TableColumn text="Service Time" fx:id="colServiceTime" prefWidth="120"/>
-                            <TableColumn text="Doctor Assigned" fx:id="colDoctor" prefWidth="140"/>
-                            <TableColumn text="Status" fx:id="colStatus" prefWidth="140"/>
+                            <TableColumn text="Customer ID" fx:id="colCustomerId"/>
+                            <TableColumn text="Arrival Time" fx:id="colArrived"/>
+                            <TableColumn text="Wait Time" fx:id="colWaitTime"/>
+                            <TableColumn text="Service Time" fx:id="colServiceTime"/>
+                            <TableColumn text="Doctor Assigned" fx:id="colDoctor"/>
+                            <TableColumn text="Status" fx:id="colStatus"/>
                         </columns>
                     </TableView>
                 </center>
@@ -30,6 +30,21 @@
                         <padding>
                             <Insets top="10" right="10" bottom="10" left="10"/>
                         </padding>
+
+                        <!-- New input controls -->
+                        <Label text="Arrival Interval (min):"/>
+                        <Spinner fx:id="arrivalMinSpinner" prefWidth="60"/>
+                        <Label text="to"/>
+                        <Spinner fx:id="arrivalMaxSpinner" prefWidth="60"/>
+
+                        <Label text="Service Duration (min):"/>
+                        <Spinner fx:id="serviceMinSpinner" prefWidth="60"/>
+                        <Label text="to"/>
+                        <Spinner fx:id="serviceMaxSpinner" prefWidth="60"/>
+
+                        <Label text="Tick Speed (ms):"/>
+                        <Spinner fx:id="tickSpeedSpinner" prefWidth="80"/>
+
                         <Button text="Start Simulation" onAction="#startSimulation"/>
                     </HBox>
                 </bottom>
@@ -76,5 +91,5 @@
                 </center>
             </BorderPane>
         </Tab>
-    </tabs> <!-- ✅ This was missing -->
+    </tabs>
 </TabPane>

@@ -32,6 +32,12 @@ public class SimulationController {
     @FXML private Label bestDoctorLabel;
     @FXML private Label worstDoctorLabel;
 
+    @FXML private Spinner<Integer> arrivalMinSpinner;
+    @FXML private Spinner<Integer> arrivalMaxSpinner;
+    @FXML private Spinner<Integer> serviceMinSpinner;
+    @FXML private Spinner<Integer> serviceMaxSpinner;
+    @FXML private Spinner<Integer> tickSpeedSpinner;
+
     private final List<Doctor> doctors = new ArrayList<>();
     private final Queue<Customer> queue = new ConcurrentLinkedQueue<>();
     private final ObservableList<Customer> customerData = FXCollections.observableArrayList();
@@ -43,8 +49,10 @@ public class SimulationController {
 
     public void initialize() {
         setupTable();
-        doctors.addAll(DoctorDAO.getAllDoctors());
+        setupSpinners();
+        customerTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
+        doctors.addAll(DoctorDAO.getAllDoctors());
         if (doctors.isEmpty()) {
             for (int i = 1; i <= 4; i++) {
                 Doctor d = new Doctor(i);
@@ -52,6 +60,14 @@ public class SimulationController {
                 doctors.add(d);
             }
         }
+    }
+
+    private void setupSpinners() {
+        arrivalMinSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10, 1));
+        arrivalMaxSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10, 3));
+        serviceMinSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 15, 4));
+        serviceMaxSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 15, 8));
+        tickSpeedSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(100, 2000, 500, 100));
     }
 
     private void setupTable() {
@@ -92,6 +108,28 @@ public class SimulationController {
     public void startSimulation() {
         if (simulationClock != null && !simulationClock.isShutdown()) return;
 
+        // Reset state
+        currentMinute = 0;
+        nextArrivalMinute = 0;
+        customerId = 1;
+        queue.clear();
+        customerData.clear();
+        listView.getItems().clear();
+        servedLabel.setText("Served Customers: 0");
+        unservedLabel.setText("Unserved Customers: 0");
+        bestDoctorLabel.setText("Best Doctor: —");
+        worstDoctorLabel.setText("Worst Doctor: —");
+        centerChart.getData().clear();
+        doctorChart.getData().clear();
+        for (Doctor d : doctors) d.reset(); // You must implement this in Doctor class
+
+        // Read inputs
+        int arrivalMin = arrivalMinSpinner.getValue();
+        int arrivalMax = arrivalMaxSpinner.getValue();
+        int serviceMin = serviceMinSpinner.getValue();
+        int serviceMax = serviceMaxSpinner.getValue();
+        int tickSpeed = tickSpeedSpinner.getValue();
+
         simulationClock = Executors.newSingleThreadScheduledExecutor();
 
         simulationClock.scheduleAtFixedRate(() -> {
@@ -101,7 +139,7 @@ public class SimulationController {
                 Customer c = new Customer(customerId++, currentMinute);
                 queue.add(c);
                 Platform.runLater(() -> customerData.add(c));
-                nextArrivalMinute = currentMinute + random.nextInt(3) + 1;
+                nextArrivalMinute = currentMinute + random.nextInt(arrivalMax - arrivalMin + 1) + arrivalMin;
             }
 
             for (Doctor doc : doctors) {
@@ -112,7 +150,7 @@ public class SimulationController {
                         c.setBeingServed(true);
                         c.startService(currentMinute, doc.getId());
 
-                        int serviceDuration = random.nextInt(5) + 4;
+                        int serviceDuration = random.nextInt(serviceMax - serviceMin + 1) + serviceMin;
                         doc.serve(c, serviceDuration);
 
                         Platform.runLater(() -> {
@@ -150,7 +188,7 @@ public class SimulationController {
                 });
             }
 
-        }, 0, 500, TimeUnit.MILLISECONDS);
+        }, 0, tickSpeed, TimeUnit.MILLISECONDS);
     }
 
     private void updateDoctorChart() {
@@ -218,6 +256,7 @@ public class SimulationController {
 
             bestDoctorLabel.setText("Best Doctor: " + (best != null ? "Doctor " + best.getId() : "—"));
             worstDoctorLabel.setText("Worst Doctor: " + (worst != null ? "Doctor " + worst.getId() : "—"));
+
         });
     }
 }

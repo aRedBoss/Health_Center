@@ -15,8 +15,8 @@ public class MainApp extends Application {
 
         primaryStage.setTitle("Health Center Simulation");
         primaryStage.setScene(scene);
-        primaryStage.setWidth(800);
-        primaryStage.setHeight(900);
+        primaryStage.setWidth(1050);
+        primaryStage.setHeight(1100);
         primaryStage.show();
     }
 

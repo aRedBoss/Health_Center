@@ -26,6 +26,12 @@ public class Doctor {
         isBusy = false;
     }
 
+    public void reset() {
+        isBusy = false;
+        totalBusyTime = 0;
+        served.clear();
+    }
+
     public boolean isBusy() { return isBusy; }
     public double getTotalBusyTime() { return totalBusyTime; }
     public Queue<Customer> getServedCustomers() { return served; }
