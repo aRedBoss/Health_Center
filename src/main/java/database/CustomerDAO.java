@@ -25,7 +25,6 @@ public class CustomerDAO {
             e.printStackTrace();
         }
     }
-
     private static String toSqlTime(int minutes) {
         int hours = minutes / 60;
         int mins = minutes % 60;
